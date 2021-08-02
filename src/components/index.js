@@ -1,1 +1,2 @@
-export * from './CounterContainer'
+export * from './CounterClass'
+export * from './CounterFunction'
