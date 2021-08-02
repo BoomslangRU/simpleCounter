@@ -1,4 +1,4 @@
-import { CounterFunction } from './components'
+import { CounterFunction } from './components/CounterFunction'
 import { CounterContainer } from './components/CounterClass'
 
 export default function App() {

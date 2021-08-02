@@ -1,34 +1,64 @@
-import { useState } from 'react'
-import { observer, useLocalObservable, Observer } from 'mobx-react'
+import { useEffect } from 'react'
+import { observer } from 'mobx-react'
+import { runInAction } from 'mobx'
 
-// if you wrap the component in an observer, the entire component will be rendering
-export const CounterFunction = props => {
+import { counterStoreFunction } from '../stores/counterStoreFunction'
 
-    // const {count,dec,inc} = ...
-    const store = useLocalObservable(() => {
-        return {
-            count: props.initialCount ?? 0,
-            dec() {
-                this.count--
-            },
-            inc() {
-                this.count++
-            }
-        }
-    })
+// store in global visibility fro educational purposes
+const store = counterStoreFunction()
+
+export const CounterFunction = observer(props => {
+
+    useEffect(() => {
+        runInAction(() => {
+            store.count = props.initialCount ?? 0
+        })
+    }, [props.initialCount])
 
     return (
         <div>
             <button onClick={store.dec}>-</button>
-            {/* rendering occurs only inside the tag <Observer> */}
-            <Observer>{() => (
-                <span>{store.count}</span>
-            )}
-            </Observer>
+            <span style={{ color: store.color }}>{store.count}</span>
             <button onClick={store.inc}>+</button>
         </div>
     )
-}
+})
+
+
+
+// // if you wrap the component in an observer, the entire component will be rendering
+// export const CounterFunction = props => {
+
+//     // const {count,dec,inc} = ...
+//     const store = useLocalObservable(() => {
+//         return {
+//             count: props.initialCount ?? 0,
+//             get color() {
+//                 return this.count > 0 ? 'green' : this.count < 0 ? 'red' : 'black'
+//             },
+//             dec() {
+//                 this.count--
+//             },
+//             inc() {
+//                 this.count++
+//             }
+//         }
+//     })
+
+//     return (
+//         <div>
+//             <button onClick={store.dec}>-</button>
+//             {/* rendering occurs only inside the tag <Observer> */}
+//             <Observer>{() => (
+//                 <span style={{ color: store.color }}>{store.count}</span>
+//             )}
+//             </Observer>
+//             <button onClick={store.inc}>+</button>
+//         </div>
+//     )
+// }
+
+
 
 // export const CounterFunction = (props) => {
 

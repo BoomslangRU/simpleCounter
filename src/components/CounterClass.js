@@ -1,38 +1,74 @@
 import { Component } from 'react'
 import { observer } from 'mobx-react'
-import { action, makeObservable, observable } from 'mobx'
+import { runInAction } from 'mobx'
 
-// @observer
+import counterStoreClass from '../stores/counterStoreClass'
+
+// store in global visibility fro educational purposes
+const store = new counterStoreClass()
+
 export const CounterContainer = observer(class extends Component {
-
-    // @observable
-    count = 0
-
-    constructor(props) {
-        super(props)
-        makeObservable(this, {
-            count: observable,
-            dec: action,
-            inc: action.bound
+    componentDidMount() {
+        // store.count = this.props.initialCount ?? 0
+        runInAction(() => {
+            store.count = this.props.initialCount ?? 0
         })
-        this.count = this.props.initialCount ?? 0
     }
     render() {
         return (
             <div>
-                <button onClick={this.dec}>-</button>
-                <span>{this.count}</span>
-                <button onClick={this.inc}>+</button>
+                <button onClick={store.dec}>-</button>
+                <span style={{ color: store.color }}>{store.count}</span>
+                <button onClick={store.inc}>+</button>
             </div>
         )
     }
-    // @action
-    dec = () => this.count--
-    // @action.bound
-    inc() {
-        this.count++
-    }
 })
+
+
+
+
+
+// // @observer
+// export const CounterContainer = observer(class extends Component {
+
+//     // @observable
+//     count = 0
+
+//     // @computed
+//     get color() {
+//         return this.count > 0 ? 'green' : this.count < 0 ? 'red' : 'black'
+//     }
+
+//     constructor(props) {
+//         super(props)
+//         makeObservable(this, {
+//             count: observable,
+//             color: computed,
+//             dec: action,
+//             inc: action.bound
+//         })
+//         this.count = this.props.initialCount ?? 0
+//     }
+//     render() {
+//         return (
+//             <div>
+//                 <button onClick={this.dec}>-</button>
+//                 <span style={{ color: this.color }}>{this.count}</span>
+//                 <button onClick={this.inc}>+</button>
+//             </div>
+//         )
+//     }
+//     // @action
+//     dec = () => this.count--
+//     // @action.bound
+//     inc() {
+//         this.count++
+//     }
+// })
+
+
+
 
 
 // export class CounterContainer extends Component {
