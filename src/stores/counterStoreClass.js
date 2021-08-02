@@ -1,8 +1,10 @@
-import { action, makeAutoObservable } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 
 export default class counterStoreClass  {
+    // observable
     count = 0
 
+    // computed
     get color() {
         return this.count > 0 ? 'green' : this.count < 0 ? 'red' : 'black'
     }
@@ -12,16 +14,13 @@ export default class counterStoreClass  {
         //     count: observable,
         //     color: computed,
         //     dec: action,
-        //     inc: action.bound
+        //     inc: action
         // })
-        makeAutoObservable(this, {
-            inc: action.bound
-        })
+        makeAutoObservable(this)
     }
 
+    // actions
     dec = () => this.count--
 
-    inc() {
-        this.count++
-    }
+    inc = () => this.count++
 }
